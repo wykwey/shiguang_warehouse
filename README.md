@@ -72,6 +72,11 @@
 - 每次提交适配代码或索引信息后，建议自测通过再提交 PR。
 - 仓库需保留 `lighthouse` 标签，否则软件无法识别为适配仓库。
 
----
+## 更多链接  
+**[如何适配](https://github.com/XingHeYuZhuan/shiguangschedule/wiki/%E5%A6%82%E4%BD%95%E9%80%82%E9%85%8D%E6%95%99%E5%8A%A1)**  
+
+**[浏览器测试插件](https://github.com/XingHeYuZhuan/shiguang_Tester)**
+
+---  
 
 如有问题或建议，欢迎提交 Issue 或 PR。
