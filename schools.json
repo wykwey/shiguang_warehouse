@@ -6,5 +6,13 @@
     "importUrl": "",
     "assetJsPath" : "schools/school.js",
     "maintainer": "星河欲转"
+  },
+  {
+    "id": "school_cust",
+    "name": "长春理工大学",
+    "initial": "C",
+    "importUrl": "https://mysso.cust.edu.cn/cas/login?service=https://jwgl.cust.edu.cn/welcome",
+    "assetJsPath": "schools/cust.js",
+    "maintainer": "itdong"
   }
 ]
