@@ -20,6 +20,7 @@
 | `importUrl`    | String  | 教务系统登录的 URL                      |
 | `assetJsPath`  | String  | 适配脚本路径（如 `schools/school.js`）  |
 | `maintainer`   | String  | 维护者信息（如姓名或 GitHub 用户名）    |
+| `category`   | String  | 适配类别。`BACHELOR_AND_ASSOCIATE` 表示“本科/专科”，`POSTGRADUATE` 表示“研究生”，`GENERAL_TOOL` 表示“通用工具”。 |
 
 示例：
 ```json
@@ -30,7 +31,8 @@
     "initial": "C",
     "importUrl": "",
     "assetJsPath": "schools/school.js",
-    "maintainer": "星河欲转"
+   "maintainer": "星河欲转",
+   "category": "GENERAL_TOOL"
   }
 ]
 ```
