@@ -20,7 +20,7 @@
 | `importUrl`    | String  | 教务系统登录的 URL                      |
 | `assetJsPath`  | String  | 适配脚本路径（如 `schools/school.js`）  |
 | `maintainer`   | String  | 维护者信息（如姓名或 GitHub 用户名）    |
-| `category`   | String  | 适配类别。***BACHELOR_AND_ASSOCIATE*** 表示“本科/专科”，***POSTGRADUATE*** 表示“研究生”，***GENERAL_TOOL*** 表示“通用工具”。 |
+| `category`   | String  | 适配类别。 `BACHELOR_AND_ASSOCIATE` 表示“本科/专科”，`POSTGRADUATE` 表示“研究生”，`GENERAL_TOOL` 表示“通用工具”。 |
 
 示例：
 ```json
@@ -45,18 +45,37 @@
 
 ## 开发流程
 
-1. **Fork 仓库**  
-   - 所有开发者需先 fork 本仓库（本仓库带有 `lighthouse` 标签，软件会自动校验仓库标签以保证数据来源正确）。
+1.  **Fork 仓库**
 
-2. **添加适配代码**  
-   - 在 `schools/` 文件夹下新建对应学校的适配 JS 文件。
-   - 在 `schools.json` 中添加学校索引信息，确保各字段填写完整。
+      - 所有开发者需先 fork 本仓库（本仓库带有 `lighthouse` 标签，软件会自动校验仓库标签以保证数据来源正确）。
 
-3. **软件测试**  
-   - 开发者需在软件的“我的-更多-更新仓库”中选择**自定义仓库或私有仓库**，来拉取并更新自己的仓库代码进行实际测试，完成 Beta 阶段适配验证。
+2.  **强制同步标签（关键步骤）**
 
-4. **提交 PR**  
-   - 测试通过后，提交 Pull Request，等待审核合并。
+      - **注意：** GitHub 的 Fork 操作不会自动复制标签（Tags）。由于软件依赖标签进行校验，开发者必须手动同步标签。
+      - 请在本地克隆您的 Fork 仓库后，运行以下命令，将标签从上游仓库拉取并推送到您的 Fork：
+        ```bash
+        # 1. 检查上游仓库是否已添加，若未添加，请添加原仓库地址
+        # git remote add upstream <原仓库URL>
+
+        # 2. 从上游仓库拉取所有标签到本地
+        git fetch upstream --tags
+
+        # 3. 将标签推送到您的 Fork 仓库 (origin)
+        git push origin --tags
+        ```
+
+3.  **添加适配代码**
+
+      - 在 `schools/` 文件夹下新建对应学校的适配 JS 文件。
+      - 在 `schools.json` 中添加学校索引信息，确保各字段填写完整。
+
+4.  **软件测试**
+
+      - 开发者需在软件的“我的-更多-更新仓库”中选择**自定义仓库或私有仓库**，来拉取并更新自己的仓库代码进行实际测试，完成 Beta 阶段适配验证。
+
+5.  **提交 PR**
+
+      - 测试通过后，提交 Pull Request，等待审核合并。
 
 ## 社区约束
 
