@@ -34,5 +34,14 @@
     "assetJsPath" : "schools/ynufe.js",
     "maintainer": "AxelPLN",
     "category": "BACHELOR_AND_ASSOCIATE"
+  },
+    {
+    "id": "school_hnzy",
+    "name": "河南职业技术学院",
+    "initial": "H",
+    "importUrl": "https://one.hnzj.edu.cn/common-service/kcb-pc/personage/personage",
+    "assetJsPath" : "schools/hnzy.js",
+    "maintainer": "一颗",
+    "category": "BACHELOR_AND_ASSOCIATE"
   }
 ]
