@@ -137,23 +137,24 @@ async function saveCourses(courses) {
     }
 }
 
-// ====================== 导入预设时间段 ======================
 // ====================== 导入预设时间段（实际大节时间） ======================
 async function importPresetTimeSlots() {
-    // 实际课程大节时间
+    // 调整后的课程大节时间，端点衔接，总时长不变
     const presetTimeSlots = [
-        { number: 1, startTime: "08:30", endTime: "10:00" }, // 第一大节（1-2）
-        { number: 2, startTime: "08:30", endTime: "10:00" }, // 第二节 1-2 合并
-        { number: 3, startTime: "10:20", endTime: "11:50" }, // 第三节（3-4）
-        { number: 4, startTime: "10:20", endTime: "11:50" }, // 第四节 3-4 合并
-        { number: 5, startTime: "14:20", endTime: "15:50" }, // 第五节（5-6）
-        { number: 6, startTime: "14:20", endTime: "15:50" }, // 第六节 5-6 合并
-        { number: 7, startTime: "16:10", endTime: "17:40" }, // 第七节（7-8）
-        { number: 8, startTime: "16:10", endTime: "17:40" }, // 第八节 7-8 合并
-        { number: 11, startTime: "19:00", endTime: "20:30" }, // 第十一节（11-12）
-        { number: 12, startTime: "19:00", endTime: "20:30" }  // 第十二节 11-12 合并
+        { number: 1, startTime: "08:30", endTime: "09:15" }, // 第一大节第一部分
+        { number: 2, startTime: "09:15", endTime: "10:00" }, // 第一大节第二部分
+        { number: 3, startTime: "10:20", endTime: "11:05" }, // 第二大节第一部分
+        { number: 4, startTime: "11:05", endTime: "11:50" }, // 第二大节第二部分
+        { number: 5, startTime: "14:20", endTime: "15:05" }, // 第三大节第一部分
+        { number: 6, startTime: "15:05", endTime: "15:50" }, // 第三大节第二部分
+        { number: 7, startTime: "16:10", endTime: "16:55" }, // 第四大节第一部分
+        { number: 8, startTime: "16:55", endTime: "17:40" }, // 第四大节第二部分
+		{ number: 9, startTime: "18:00", endTime: "18:45" }, // 第五大节第一部分
+		{ number: 10, startTime: "18:45", endTime: "19:00" }, // 第五大节第二部分
+        { number: 11, startTime: "19:00", endTime: "19:45" }, // 第六大节第一部分
+        { number: 12, startTime: "19:45", endTime: "20:30" }  // 第六大节第二部分
     ];
-
+    
     try {
         const result = await window.AndroidBridgePromise.savePresetTimeSlots(JSON.stringify(presetTimeSlots));
         if (result === true) {
