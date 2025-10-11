@@ -25,5 +25,14 @@
     "assetJsPath" : "schools/shzq.js",
     "maintainer": "Kredenk",
     "category": "BACHELOR_AND_ASSOCIATE"
+  },
+  {
+    "id": "school_ynufe",
+    "name": "云南财经大学",
+    "initial": "Y",
+    "importUrl": "https://xjwis.ynufe.edu.cn/jsxsd/",
+    "assetJsPath" : "schools/ynufe.js",
+    "maintainer": "AxelPLN",
+    "category": "BACHELOR_AND_ASSOCIATE"
   }
 ]
