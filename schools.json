@@ -43,5 +43,14 @@
     "assetJsPath" : "schools/hnzy.js",
     "maintainer": "一颗",
     "category": "BACHELOR_AND_ASSOCIATE"
+  },
+    {
+    "id": "school_jyvtc",
+    "name": "河南职业技术学院",
+    "initial": "H",
+    "importUrl": "https://jwgl.jyvtc.edu.cn/jyvtcjw/",
+    "assetJsPath" : "schools/jyvtc.js",
+    "maintainer": "星河欲转",
+    "category": "BACHELOR_AND_ASSOCIATE"
   }
 ]
