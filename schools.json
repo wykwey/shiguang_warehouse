@@ -46,8 +46,8 @@
   },
     {
     "id": "school_jyvtc",
-    "name": "河南职业技术学院",
-    "initial": "H",
+    "name": "济源职业技术学院",
+    "initial": "J",
     "importUrl": "https://jwgl.jyvtc.edu.cn/jyvtcjw/",
     "assetJsPath" : "schools/jyvtc.js",
     "maintainer": "星河欲转",
