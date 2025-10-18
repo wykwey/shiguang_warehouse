@@ -1,0 +1,34 @@
+# index/root_index.yaml
+# 整个适配器仓库的根索引文件。
+# CI/CD 构建脚本会读取此文件，以确定需要处理哪些学校的适配器资源。
+
+schools:
+  - id: "GLOBAL_TOOLS"    # id 唯一值
+    name: "通用工具与服务" # 名称
+    initial: "G"          # 排序首字母
+    resource_folder: "GLOBAL_TOOLS"   # 资源文件夹名称
+
+  - id: "CUST"
+    name: "长春理工大学"
+    initial: "C"
+    resource_folder: "CUST" 
+
+  - id: "SHZQ"
+    name: "上海中侨职业技术大学"
+    initial: "S"
+    resource_folder: "SHZQ"  
+    
+  - id: "HNZY"
+    name: "河南职业技术学院"
+    initial: "H"
+    resource_folder: "HNZY"
+    
+  - id: "JYVTC"
+    name: "济源职业技术学院"
+    initial: "J"
+    resource_folder: "JYVTC"
+
+  - id: "YNUFE"
+    name: "云南财经大学"
+    initial: "Y"
+    resource_folder: "YNUFE"
