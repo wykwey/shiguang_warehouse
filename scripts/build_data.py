@@ -4,13 +4,18 @@ import os
 import datetime
 from pathlib import Path
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+# 确保该目录在模块搜索路径中
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+
 # --- 1. Protobuf 依赖导入 ---
 # 注意：这依赖于 protoc 编译生成的 school_index_pb2.py 文件
 try:
-    # 导入生成的 Protobuf 类 (必须先运行 protoc)
     from school_index_pb2 import SchoolIndex, School, Adapter, AdapterCategory 
 except ImportError:
-    print("错误：无法导入 Protobuf 模块。请确认您已运行 protoc 命令生成了 school_index_pb2.py。")
+    print("错误：无法导入 Protobuf 模块 (school_index_pb2)。请确认文件已存在。")
     sys.exit(1)
 
 
@@ -27,15 +32,12 @@ OUTPUT_PB_FILE = "school_index.pb"
 # --- 3. 辅助函数：获取版本ID (用于 version_id 字段) ---
 def get_version_id():
     """
-    【统一标准】：只使用精确到毫秒的时间戳作为数据版本ID，
-    确保每次构建的唯一性，并消除对 Git 环境的依赖。
-    标准格式：TIME_<年><月><日><时><分><秒>_<毫秒>
+    【统一标准】：只使用精确到毫秒的时间戳作为数据版本ID。
     """
     # 获取当前时间（包含微秒）
     now = datetime.datetime.now()
     
     # 格式化时间部分
-    # 格式化为：YYYYMMDDhhmmss
     time_str = now.strftime("TIME_%Y%m%d%H%M%S")
     micro_str = f"{now.microsecond // 1000:03d}" 
     
@@ -45,8 +47,6 @@ def get_version_id():
 # --- 4. 辅助函数：YAML 解析逻辑 ---
 def get_adapter_category_enum(category_str):
     """将 YAML 字符串类别映射到 Protobuf 枚举值。"""
-    # 使用 getattr 从 Protobuf 模块中查找对应的枚举值。
-    # 如果找不到，安全地返回 ADAPTER_CATEGORY_UNKNOWN (0)。
     enum_value = getattr(AdapterCategory, category_str, AdapterCategory.ADAPTER_CATEGORY_UNKNOWN)
     return enum_value
 
@@ -111,7 +111,6 @@ def build_protobuf_index(parsed_schools_data):
             # 填充 optional 字段：只有当字段不为 None 时才设置
             import_url = adapter_data.get('import_url')
             if import_url is not None:
-                # 即使 import_url 为空字符串 ""，也会被显式设置，满足 optional 的存在性要求
                 adapter_msg.import_url = import_url
             
             # 填充枚举字段
@@ -144,10 +143,8 @@ if __name__ == "__main__":
             f.write(index_message.SerializeToString()) 
         
         print(f"\n构建成功！二进制文件已保存到: {OUTPUT_FILE}")
-        # 可选：打印文件大小，方便调试
         print(f"文件大小: {os.path.getsize(OUTPUT_FILE) / 1024:.2f} KB")
 
     except Exception as e:
         print(f"构建失败！致命错误: {e}", file=sys.stderr)
-        # 如果是文件未找到等错误，请给出更明确的提示
         sys.exit(1)
