@@ -20,10 +20,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: 安装 Python 依赖 (PyYAML)
+      - name: 安装 Python 依赖
         run: |
           python -m pip install --upgrade pip
-          pip install pyyaml
+          pip install pyyaml protobuf
       
       - name: 执行数据构建脚本
         # 脚本将生成 school_index.pb 到仓库根目录

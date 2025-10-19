@@ -24,9 +24,9 @@ enum AdapterCategory {
 // --- 2. 顶层消息：整个索引文件 ---
 message SchoolIndex {
   // 字段编号 1：显式协议版本号，用于客户端发现不兼容的大改动
-  int64 protocol_version = 1; 
+  int32 protocol_version = 1;
 
-  // 字段编号 2：数据文件的版本ID (CI/CD自动生成的Commit Hash或时间戳)
+  // 字段编号 2：数据文件的版本ID (CI/CD自动生成的时间戳)
   string version_id = 2; 
 
   // 字段编号 3：所有学校和通用工具的列表
