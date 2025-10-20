@@ -1,0 +1,9 @@
+# resources/TARU/adapters.yaml
+adapters:
+  - adapter_id: "TARU_01"
+    adapter_name: "塔里木大学适配教务"
+    category: "BACHELOR_AND_ASSOCIATE"
+    asset_js_path: "taru_01.js"
+    import_url: "https://jwgl.taru.edu.cn/jwglxt/"
+    maintainer: "星河欲转"
+    description: "塔里木大学适配教务,添加双季作息,非本校开发者适配如果有误建议提交issues"
