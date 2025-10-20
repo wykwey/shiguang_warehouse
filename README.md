@@ -6,43 +6,84 @@
 
 ## 仓库结构说明
 
-- `schools.json`：适配学校索引列表，包含所有已适配学校的关键信息。
-- `schools/`：存放各学校的适配代码，每个学校一个独立的 JS 文件。
-- `LICENSE`：开源协议文件。
 
-## schools.json 字段说明
+## 资源目录结构
 
-每个学校索引应包含以下字段：
+每个学校或工具都有一个独立的目录，包含以下文件：
+## root_index.yaml 填写与适配流程
 
-| 字段名         | 类型    | 说明                                   |
-| -------------- | ------- | -------------------------------------- |
-| `id`           | String  | 学校唯一标识（建议用拼音或英文缩写）    |
-| `name`         | String  | 学校中文全称                           |
-| `initial`      | String  | 学校名称的首字母，用于排序和查找        |
-| `importUrl`    | String  | 教务系统登录的 URL                      |
-| `assetJsPath`  | String  | 适配脚本路径（如 `schools/school.js`）  |
-| `maintainer`   | String  | 维护者信息（如姓名或 GitHub 用户名）    |
-| `category`   | String  | 适配类别。 `BACHELOR_AND_ASSOCIATE` 表示“本科/专科”，`POSTGRADUATE` 表示“研究生”，`GENERAL_TOOL` 表示“通用工具”。 |
+所有适配学校/工具必须先在 `index/root_index.yaml` 文件中登记，CI/CD 构建脚本会根据此文件决定处理哪些资源。
+
+### 字段说明
+
+每个学校/工具条目需包含如下字段：
+
+| 字段名           | 类型    | 说明                       |
+| --------------- | ------- | -------------------------- |
+| id              | String  | 唯一标识（建议拼音或缩写） |
+| name            | String  | 中文名称                   |
+| initial         | String  | 名称首字母（用于排序）     |
+| resource_folder | String  | 资源文件夹名称             |
 
 示例：
-```json
-[
-  {
-    "id": "school_Cs",
-    "name": "测试大学(这是一个空网站，用于组件测试)",
-    "initial": "C",
-    "importUrl": "",
-    "assetJsPath": "schools/school.js",
-   "maintainer": "星河欲转",
-   "category": "GENERAL_TOOL"
-  }
-]
+```yaml
+schools:
+      - id: "GLOBAL_TOOLS"
+            name: "通用工具与服务"
+            initial: "G"
+            resource_folder: "GLOBAL_TOOLS"
+      - id: "CUST"
+            name: "长春理工大学"
+            initial: "C"
+            resource_folder: "CUST"
+```
+
+### 适配注意
+
+1. 若要适配新学校/工具，**必须先在 `root_index.yaml` 添加条目**，填写上述字段。
+2. 在 `resources/` 下创建与 `resource_folder` 字段一致的文件夹。
+3. 在该文件夹内添加 `adapters.yaml` 和适配脚本。
+4. 只有在 `root_index.yaml` 已登记的学校/工具，才能提交适配文件。
+5. 新增学校/工具时，请确保在适配 PR 中已将相关条目添加到 `root_index.yaml` 的学校列表，无需单独提交更新 PR。
+
+```
+资源目录名/
+  ├── adapters.yaml  # 配置信息
+  └── xxx.js         # 适配脚本
+```
+
+## adapters.yaml 配置说明
+
+
+每个适配器配置应包含以下字段（YAML格式，字段全部必填）：
+
+| 字段名           | 类型    | 说明                                   |
+| --------------- | ------- | -------------------------------------- |
+| adapter_id      | String  | 唯一标识（建议用拼音或英文缩写）,个人建议使用学校id加序号的形式        |
+| adapter_name    | String  | 中文名称                               |
+| category        | String  | 分类：`BACHELOR_AND_ASSOCIATE`(本科/专科)、`POSTGRADUATE`(研究生)、`GENERAL_TOOL`(通用工具) |
+| asset_js_path   | String  | 适配脚本的**相对路径**（如 `school.js`）         |
+| import_url      | String  | 系统登录URL（教务系统适配器必填，工具可为空） |
+| maintainer      | String  | 维护者信息（如姓名或 GitHub 用户名）    |
+| description     | String  | 简要说明（如适配用途、备注等）          |
+
+
+示例：
+```yaml
+adapters:
+      - adapter_id: "GENERAL_TOOL_01" # id加上序号
+            adapter_name: "组件测试"
+            category: "GENERAL_TOOL"
+            asset_js_path: "school.js" #相对路径
+            import_url: ""
+            maintainer: "星河欲转"
+            description: "这是一个空网站，用于组件测试与演示模式"
 ```
 
 **注意：**  
 - 请严格按照上述字段填写，不要添加或减少字段。
 - `importUrl` 一定要是登录页面。
-- `assetJsPath` 填写对应学校的适配脚本路径。
+- `asset_js_path` 填写对应学校的适配脚本**相对路径**。
 - `maintainer` 填写维护者信息，便于后续沟通和维护。
 
 ## 开发流程
@@ -53,8 +94,9 @@
 
 3.  **添加适配代码**
 
-      - 在 `schools/` 文件夹下新建对应学校的适配 JS 文件。
-      - 在 `schools.json` 中添加学校索引信息，确保各字段填写完整。
+      - 在 `resources/` 目录下创建对应学校/工具的目录,新增学校记得添加学校索引`root_index.yaml`
+      - 在学校/工具目录中添加 `adapters.yaml` 配置文件和对应的适配脚本。
+      - 确保配置文件中的所有字段都填写完整和准确。
 
 4.  **软件测试**
 
@@ -67,7 +109,7 @@
 ## 社区约束
 
 - 禁止恶意抹除公开代码的原始开发者的代码贡献记录。
-- 未经相关授权，禁止在脱离官方分支的包中包含其他开发者的适配代码，仅可使用自己所有的适配代码。其他开发者的适配代码仅能在官方仓库或其分支中使用。
+- 未经相关授权，禁止在脱离官方分支的包中包含其他开发者的适配代码，仅可使用自己所有的适配代码。其他开发者的适配代码仅能在官方仓库或其分支中使用，除非你获得相应的开发者授权。
 - **例外情况**：如果您的分支或私有适配仓库仅用于官方 app 的内部测试或个人使用（即仅在官方 app 范围内显示和调用，不对外分发或公开），则可以包含其他开发者的适配代码。  
   但如果您的分支或包对外分发、公开或用于非官方 app，则只能包含您自己拥有的适配代码，不能包含其他开发者的适配代码，除非获得相关授权。
 - 允许开发者建立私有仓库或分支本软件，但需遵守上述约定。
@@ -76,7 +118,7 @@
 
 ## 注意事项
 
-- 请确保 `schools.json` 信息准确，入口文件路径与实际文件一致。
+- 请确保 `adapters.yaml` 信息准确完整，符合规范要求。
 - 每次提交适配代码或索引信息后，建议自测通过再提交 PR。
 - 仓库需保留 `lighthouse` 标签，否则软件无法识别为适配仓库。
 
