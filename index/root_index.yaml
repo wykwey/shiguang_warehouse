@@ -36,4 +36,9 @@ schools:
   - id: "HNSF"
     name: "河南师范大学"
     initial: "H"
-    resource_folder: "HNSF"    
+    resource_folder: "HNSF"
+
+  - id: "TARU"
+    name: "塔里木大学"
+    initial: "T"
+    resource_folder: "TARU"      

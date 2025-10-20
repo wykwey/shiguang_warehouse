@@ -27,7 +27,7 @@
 
 示例：
 ```yaml
-schools:
+schools: #固定字段
       - id: "GLOBAL_TOOLS"
             name: "通用工具与服务"
             initial: "G"
@@ -70,7 +70,7 @@ schools:
 
 示例：
 ```yaml
-adapters:
+adapters: #固定字段
       - adapter_id: "GENERAL_TOOL_01" # id加上序号
             adapter_name: "组件测试"
             category: "GENERAL_TOOL"

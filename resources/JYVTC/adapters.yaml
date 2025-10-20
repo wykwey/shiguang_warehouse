@@ -6,4 +6,4 @@ adapters:
     asset_js_path: "jyvtc.js"
     import_url: "https://jwgl.jyvtc.edu.cn/jyvtcjw/"
     maintainer: "星河欲转"
-    description: ""
+    description: "济源职业技术学院适配教务,添加双季作息,非本校开发者适配如果有误建议提交issue"
