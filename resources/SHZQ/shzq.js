@@ -107,7 +107,7 @@ function parseShzqCourseData(rawData) {
 function isLoginPage() {
     const url = window.location.href;
     // 检查 URL 是否包含特定的登录页面路径
-    return url.includes('jw.shzq.edu.cn/jwglxt/xtgl/login_slogin.html');
+    return url.includes('cas.shzq.edu.cn/cas/login');
 }
 
 /**
