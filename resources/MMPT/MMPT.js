@@ -97,8 +97,6 @@ function mergeDuplicateCourses(courses) {
     return merged;
 }
 
-// ====================== MMPT配置 ======================
-// MMPT（茂名职业技术学院）专用配置
 const MMPT_CONFIG = {
     name: '茂名职业技术学院',
     domains: ['mmpt.edu.cn', 'mmvtc.edu.cn'],
@@ -166,63 +164,59 @@ async function selectCampusSchedule() {
 }
 
 
-// 选择入学年份
-async function selectEnrollmentYear() {
+// 选择学年
+async function selectAcademicYear() {
     const currentYear = new Date().getFullYear();
     const years = [];
     
-    // 生成最近5年的入学年份选项
-    for (let i = 0; i < 5; i++) {
-        years.push(`${currentYear - i}年9月入学`);
+    // 生成最近3年的学年选项，格式为 xxxx-xxxx
+    for (let i = 0; i < 3; i++) {
+        const year = currentYear - i;
+        years.push(`${year}-${year + 1}`);
     }
     
     const yearIndex = await window.AndroidBridgePromise.showSingleSelection(
-        "选择入学年份", 
+        "选择学年", 
         JSON.stringify(years),
-        0 // 默认选择当前年份
+        0 // 默认选择当前学年
     );
     
     if (yearIndex === null) {
-        return currentYear; // 默认当前年份
+        return currentYear; // 默认当前学年
     }
     
     return currentYear - yearIndex;
 }
 
-// 根据入学年份计算当前是第几个学期（通用公式）
-function calculateCurrentSemester(enrollmentYear) {
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth() + 1;
+// 选择学期
+async function selectSemester() {
+    const semesters = ["第一学期", "第二学期"];
+    const semesterIndex = await window.AndroidBridgePromise.showSingleSelection(
+        "选择学期", 
+        JSON.stringify(semesters),
+        -1
+    );
     
-    // 计算从入学到现在的总月数
-    // 9月入学，所以从9月开始计算
-    const totalMonths = (currentYear - enrollmentYear) * 12 + (currentMonth - 9);
+    if (semesterIndex === null) {
+        return "3"; // 默认第一学期
+    }
     
-    // 每年2个学期，每学期6个月
-    // 第一学期：9-2月（6个月），第二学期：3-8月（6个月）
-    const semester = Math.floor(totalMonths / 6) + 1;
-    
-    // 限制最大学期数为10（3年制）
-    return Math.min(semester, 10);
+    return semesterIndex === 0 ? "3" : "12";
 }
 
 // ====================== 获取课程数据 ======================
 async function fetchCourseData() {
     try {
-        // 使用MMPT配置，让用户选择入学年份
+        // 使用MMPT配置，让用户选择学年和学期
         const schoolConfig = getMMPTConfig();
-        const enrollmentYear = await selectEnrollmentYear();
-        const semester = calculateCurrentSemester(enrollmentYear);
+        const academicYear = await selectAcademicYear();
+        const semester = await selectSemester();
         
         console.log(`使用学校配置: ${schoolConfig.name}`);
-        console.log(`入学年份: ${enrollmentYear}, 当前学期: ${semester}`);
+        console.log(`选择学年: ${academicYear}, 选择学期: ${semester}`);
         
         // 构建完整的API URL
         const apiUrl = schoolConfig.jwcUrl + schoolConfig.apiPath;
-        
-        // 计算当前学年（入学年份对应的学年）
-        const currentAcademicYear = enrollmentYear;
         
         // 从新系统获取课程数据
         // 使用POST请求获取完整的课程数据
@@ -233,11 +227,11 @@ async function fetchCourseData() {
                 'Accept': 'application/json'
             },
             body: new URLSearchParams({
-                'xnm': currentAcademicYear,   // 入学年份对应的学年
-                'xqm': semester,             // 计算出的当前学期
-                'kzlx': 'ck',                // 课程类型
-                'xsdm': '',                  // 学生代码
-                'kclbdm': ''                 // 课程类别代码
+                'xnm': academicYear,   // 用户选择的学年
+                'xqm': semester,      // 用户选择的学期（3或12）
+                'kzlx': 'ck',         // 课程类型
+                'xsdm': '',           // 学生代码
+                'kclbdm': ''          // 课程类别代码
             })
         });
         
@@ -338,8 +332,8 @@ async function runImportFlow() {
     AndroidBridge.showToast("课程导入流程即将开始...");
 
     try {
-        // 1️⃣ 获取课程数据（选择入学年份）
-        AndroidBridge.showToast("请选择入学年份...");
+        // 1️⃣ 获取课程数据（选择学年学期）
+        AndroidBridge.showToast("请选择学年和学期...");
         
         // 从新系统获取课程数据
         const responseData = await fetchCourseData();
