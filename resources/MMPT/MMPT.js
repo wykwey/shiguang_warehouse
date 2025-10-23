@@ -33,45 +33,54 @@ function parseWeeks(weekStr) {
     for (const part of parts) {
         const trimmed = part.trim();
         
-        if (trimmed.includes('-')) {
-            // 处理范围，如 "1-19周" 或 "2-12周"
-            const rangeMatch = trimmed.match(/(\d+)-(\d+)/);
-            if (rangeMatch) {
-                const start = parseInt(rangeMatch[1]);
-                const end = parseInt(rangeMatch[2]);
-                for (let i = start; i <= end && i <= 20; i++) {
+        // 使用更精确的正则表达式匹配
+        const singleWeekMatch = trimmed.match(/(\d+)周?\(单\)/);
+        const doubleWeekMatch = trimmed.match(/(\d+)周?\(双\)/);
+        const rangeMatch = trimmed.match(/(\d+)-(\d+)周?/);
+        const singleMatch = trimmed.match(/(\d+)周?/);
+        
+        if (singleWeekMatch) {
+            // 处理单周，如 "15周(单)" 或 "15(单)"
+            const week = parseInt(singleWeekMatch[1]);
+            if (week >= 1 && week <= 20) {
+                weeks.add(week);
+            }
+        } else if (doubleWeekMatch) {
+            // 处理双周，如 "15周(双)" 或 "15(双)"
+            const week = parseInt(doubleWeekMatch[1]);
+            if (week >= 1 && week <= 20) {
+                weeks.add(week);
+            }
+        } else if (trimmed.includes('(单)') && rangeMatch) {
+            // 处理单周范围，如 "15-17周(单)"
+            const start = parseInt(rangeMatch[1]);
+            const end = parseInt(rangeMatch[2]);
+            for (let i = start; i <= end; i += 2) {
+                if (i >= 1 && i <= 20) {
                     weeks.add(i);
                 }
             }
-        } else if (trimmed.includes('周')) {
-            // 处理单个周次，如 "15周"
-            const singleMatch = trimmed.match(/(\d+)/);
-            if (singleMatch) {
-                const week = parseInt(singleMatch[1]);
-                if (week >= 1 && week <= 20) {
-                    weeks.add(week);
+        } else if (trimmed.includes('(双)') && rangeMatch) {
+            // 处理双周范围，如 "15-17周(双)"
+            const start = parseInt(rangeMatch[1]);
+            const end = parseInt(rangeMatch[2]);
+            for (let i = start + 1; i <= end; i += 2) {
+                if (i >= 1 && i <= 20) {
+                    weeks.add(i);
                 }
             }
-        } else if (trimmed.includes('(单)')) {
-            // 处理单周，如 "15-17周(单)" 表示15,17周
-            const rangeMatch = trimmed.match(/(\d+)-(\d+)/);
-            if (rangeMatch) {
-                const start = parseInt(rangeMatch[1]);
-                const end = parseInt(rangeMatch[2]);
-                for (let i = start; i <= end; i += 2) { // 单周
-                    if (i >= 1 && i <= 20) {
-                        weeks.add(i);
-                    }
-                }
+        } else if (rangeMatch) {
+            // 处理连续范围，如 "1-19周"
+            const start = parseInt(rangeMatch[1]);
+            const end = parseInt(rangeMatch[2]);
+            for (let i = start; i <= end && i <= 20; i++) {
+                weeks.add(i);
             }
-        } else {
-            // 处理纯数字
-            const singleMatch = trimmed.match(/(\d+)/);
-            if (singleMatch) {
-                const week = parseInt(singleMatch[1]);
-                if (week >= 1 && week <= 20) {
-                    weeks.add(week);
-                }
+        } else if (singleMatch) {
+            // 处理单个周次，如 "15周" 或 "15"
+            const week = parseInt(singleMatch[1]);
+            if (week >= 1 && week <= 20) {
+                weeks.add(week);
             }
         }
     }
