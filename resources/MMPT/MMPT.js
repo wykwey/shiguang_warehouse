@@ -1,5 +1,27 @@
 // ====================== 工具函数 ======================
 
+/**
+ * 检查用户是否已登录。
+ * 如果当前URL包含登录关键字，说明用户未登录，返回false。
+ * 如果不包含登录关键字，说明用户已登录，返回true。
+ */
+function isUserLoggedIn() {
+    const url = window.location.href;
+    const loginKeywords = [
+        "https://jwc.mmpt.edu.cn/xtgl/login_slogin.html"
+    ];
+    
+    // 检查URL是否包含登录关键字
+    for (const keyword of loginKeywords) {
+        if (url.includes(keyword)) {
+            return false; // 包含登录关键字，说明用户未登录
+        }
+    }
+    
+    // 不包含登录关键字，说明用户已登录
+    return true;
+}
+
 // 解析节次字符串 -> 开始节次和结束节次
 function parseSections(sectionStr) {
     if (!sectionStr) return { start: 1, end: 1 };
@@ -318,6 +340,12 @@ async function importPresetTimeSlots() {
 
 // ====================== 主流程 ======================
 async function runImportFlow() {
+    // 检查用户是否已登录
+    if (!isUserLoggedIn()) {
+        AndroidBridge.showToast("检测到未登录状态，请先登录后再使用课程导入功能！");
+        return;
+    }
+    
     AndroidBridge.showToast("课程导入流程即将开始...");
 
     try {
@@ -328,7 +356,6 @@ async function runImportFlow() {
         const responseData = await fetchCourseData();
         if (!responseData) {
             AndroidBridge.showToast("获取课程数据失败！");
-            AndroidBridge.notifyTaskCompletion();
             return;
         }
         
@@ -337,7 +364,6 @@ async function runImportFlow() {
         const courses = parseCourseData(responseData);
         if (!courses || courses.length === 0) {
             AndroidBridge.showToast("未找到课程数据！");
-            AndroidBridge.notifyTaskCompletion();
             return;
         }
         
@@ -349,7 +375,6 @@ async function runImportFlow() {
         AndroidBridge.showToast("正在保存课程数据...");
         const saveResult = await saveCourses(mergedCourses);
         if (!saveResult) {
-            AndroidBridge.notifyTaskCompletion();
             return;
         }
 
@@ -357,13 +382,15 @@ async function runImportFlow() {
         AndroidBridge.showToast("请选择校区时间表...");
         await importPresetTimeSlots();
 
-        AndroidBridge.showToast("所有任务完成！");
+        // ✅ 只有所有步骤都成功完成，才通知任务完成
+        AndroidBridge.showToast(`课程导入成功，共导入 ${mergedCourses.length} 门课程！`);
+        console.log("JS：整个导入流程执行完毕并成功。");
         AndroidBridge.notifyTaskCompletion();
         
     } catch (err) {
         console.error("导入流程失败:", err);
         AndroidBridge.showToast("导入失败：" + err.message);
-        AndroidBridge.notifyTaskCompletion();
+        // ❌ 失败时不调用 notifyTaskCompletion()
     }
 }
 
