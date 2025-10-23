@@ -1,9 +1,9 @@
 # resources/HNZY/adapters.yaml
 adapters:
-  - adapter_id: "HNZY_01"
+  - adapter_id: "MMPT"
     adapter_name: "茂名职业技术学院课表"
     category: "BACHELOR_AND_ASSOCIATE"
-    asset_js_path: "MMZYJSXY.js"
+    asset_js_path: "MMPT.js"
     import_url: "https://jwc.mmpt.edu.cn/kbcx/xskbcx_cxXskbcxIndex.html?gnmkdm=N2151&layout=default"
     maintainer: "一颗"
     description: "如果导入失败，请前往适配器仓库提交 issue 或 PR 以更新适配器。"

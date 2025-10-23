@@ -43,7 +43,7 @@ schools:
     initial: "T"
     resource_folder: "TARU"      
 
-  - id: "MMZYJSXY"
+  - id: "MMPT"
     name: "茂名职业技术学院"
     initial: "M"
-    resource_folder: "MMZYJSXY"  
+    resource_folder: "MMPT"  
